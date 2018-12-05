@@ -1,0 +1,24 @@
+{
+    "tareas":[
+
+        { 
+            "titulo": "Tarea1",
+            "responsable": "Gonzalo",
+            "descripcion": "Lunes",
+            "prioridad": "Alta"
+        },
+        { 
+            "titulo": "Tarea2",
+            "responsable": "Juan Cruz",
+            "descripcion": "Martes",
+            "prioridad": "Media"
+        },
+        { 
+            "titulo": "Tarea3",
+            "responsable": "Jorge",
+            "descripcion": "Miercoles",
+            "prioridad": "Baja"
+        }
+    ]
+
+}
