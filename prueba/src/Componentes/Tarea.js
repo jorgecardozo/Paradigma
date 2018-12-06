@@ -1,6 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component,Fragment } from 'react';
 
 import tema  from '../tareas.json';
+
+import FormularioTareas from './FormularioTareas';
 
 class Tarea extends Component{
 
@@ -65,17 +67,16 @@ class Tarea extends Component{
           
           return (
             
-              <div className="container">
-                <div className="row mt-4">
-                  {tareas}
-                </div>
-              </div>
-         
+            <Fragment>
+                <FormularioTareas onAddTareas={this.handleAddTarea} /> 
 
-        );
-    
-    
-
+                <div className="container">
+                  <div className="row mt-4">
+                    {tareas}
+                  </div>
+                </div>        
+            </Fragment>            
+        );     
     }
 
 

@@ -88,7 +88,7 @@ class App extends Component {
 
           <img src={logo} className="App-logo" alt="logo" />
 
-          {/* <FormularioTareas onAddTareas={this.handleAddTarea} /> */}
+          
           
 
           <div className="container">
