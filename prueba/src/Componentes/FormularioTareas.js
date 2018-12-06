@@ -9,12 +9,14 @@ class FormularioTareas extends Component{
           descripcion: '',
           prioridad: 'low'
         };
+
         this.handleInputChange = this.handleInputChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        //this.handleSubmit = this.handleSubmit.bind(this);
+        
       }
 
 
-      handleSubmit(e) {
+      handleSubmit = (e) => {
         e.preventDefault();
         this.props.onAddTareas(this.state);
         this.setState({

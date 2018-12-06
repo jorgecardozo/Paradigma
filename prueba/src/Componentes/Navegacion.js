@@ -16,8 +16,8 @@ import {
 import {Link} from 'react-router-dom';
 
 class Navegacion extends Component {
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
 
         this.toggleNavbar = this.toggleNavbar.bind(this);
         this.state = {
