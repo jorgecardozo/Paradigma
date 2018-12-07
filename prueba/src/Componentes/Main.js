@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 
+import axios from 'axios'
+
 class Main extends Component{
 
     
@@ -43,6 +45,14 @@ class Main extends Component{
         console.log(value,name);
         if(expresionRegular.test(this.state.email)){
             console.log("valido");
+            
+            axios.get('http://10.0.0.68:81/personas/')
+              .then(function (response) {
+                console.log(response);
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
         }
         else
             console.log("Invalido");
