@@ -2,11 +2,134 @@ import React, {Component} from 'react';
 
 class Main extends Component{
 
+    
+    constructor () {
+        super();
+        this.state = {
+          nombre: '',
+          apellido: '',
+          tipo: 'DNI',
+          documento: '',
+          email: ''
+        }
+    }
+
+    validarNumero = (e) =>{
+        const {value, name} = e.target;
+        var expresionRegular=/^\d{0,8}$/;
+        if(expresionRegular.test(value)){
+        console.log(value,name);
+        // console.log("Error");
+            this.setState({
+                [name]: value
+              });
+        }
+       
+    }
+
+    validarMail = (e) =>{
+        const {value, name} = e.target;
+        
+            this.setState({
+                [name]: value
+              }); 
+    }
+
+    handleSubmit = (e) =>{
+        e.preventDefault();
+
+        const {value, name} = e.target;
+        var expresionRegular=/^[a-zA-Z0-9_\-\.~]{2,}@[a-zA-Z0-9_\-\.~]{2,}\.[a-zA-Z]{2,4}$/;
+        console.log(value,name);
+        if(expresionRegular.test(this.state.email)){
+            console.log("valido");
+        }
+        else
+            console.log("Invalido");
+    }   
+
+    validarString = (e) =>{
+        const {value, name} = e.target;
+        var expresionRegular=/^\w{0,5}$/;
+        if(expresionRegular.test(value)){
+        console.log(value,name);
+        // console.log("Error");
+            this.setState({
+                [name]: value
+              });
+        }
+       
+    }
+    
     render(){
         return(
-            <div>
-                <h1>Main</h1>
-            </div>
+            <div className="container">
+                <div className="row mt-4">
+                    <div className="card">
+                        <form onSubmit={this.handleSubmit}
+                        // onSubmit={} 
+                         className="card-body">
+                            <div className="form-group">
+                            <input
+                                type="text"
+                                name="nombre"
+                                className="form-control"
+                                value={this.state.nombre}
+                                onChange={this.validarString}
+                                placeholder="Nombre"
+                                />
+                            </div>
+                            <div className="form-group">
+                                <input
+                                    type="text"
+                                    name="apellido"
+                                    className="form-control"
+                                    value={this.state.apellido}
+                                    onChange={this.validarString}
+                                    placeholder="Apellido"
+                                    />
+                            </div>
+                            <div className="form-group">
+                                <select
+                                    name="tipo"
+                                    className="form-control"
+                                    //   value={}
+                                    //   onChange={}
+                                >
+                                    <option>DNI</option>
+                                    <option>Cedula</option>
+                                    <option>Pasaporte</option>
+                                </select>
+                            </div>
+                            <div className="form-group">
+                                <input
+                                    type="text"
+                                    name="documento"
+                                    className="form-control"
+                                    value={this.state.documento}
+                                    onChange={this.validarNumero}
+                                    placeholder="Documento"
+                                    />
+                            </div>
+                            <div className="form-group">
+                                <input
+                                    type="text"
+                                    name="email"
+                                    className="form-control"
+                                    value={this.state.email}
+                                    onChange={this.validarMail}
+                                    placeholder="Email"
+                                    />
+                            </div>
+                            
+
+                            <button type="submit" className="btn btn-primary">
+                            Save
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div> 
         );
     }
 }
