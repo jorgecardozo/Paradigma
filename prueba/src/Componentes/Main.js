@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 
 import axios from 'axios'
+import Tablas from './Tablas';
 
 class Main extends Component{
 
@@ -12,9 +13,37 @@ class Main extends Component{
           apellido: '',
           tipo: 'DNI',
           documento: '',
-          email: ''
+          email: '',
+          datos:[]
         }
+
+        axios.get('http://localhost:3001/personas')
+        .then(function (response) {
+            console.log("Las pido");
+            console.log(response.data);
+
+            this.setState({datos : response.data});
+            console.log("veo si actualizo en datos");
+            console.log(this.state.datos);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+
+       
     }
+
+    /*componentDidMount(){
+        axios.get('http://localhost:3001/personas')
+              .then(function (response) {
+                console.log(response);
+                this.setState({datos:response.data});
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
+    }
+    */
 
     validarNumero = (e) =>{
         const {value, name} = e.target;
@@ -46,7 +75,7 @@ class Main extends Component{
         if(expresionRegular.test(this.state.email)){
             console.log("valido");
             
-            axios.get('http://10.0.0.68:81/personas/')
+            axios.get('http://localhost:3001/personas')
               .then(function (response) {
                 console.log(response);
               })
@@ -71,9 +100,14 @@ class Main extends Component{
        
     }
     
-    render(){
+    render(){ {console.log("dentro de main, antes de mandar DB")}
+                 {console.log(this.state.datos)}
         return(
+               
+        
             <div className="container">
+                <Tablas db={this.state.datos}/>
+
                 <div className="row mt-4">
                     <div className="card">
                         <form onSubmit={this.handleSubmit}
