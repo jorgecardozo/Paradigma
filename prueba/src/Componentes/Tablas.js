@@ -6,7 +6,9 @@ import axios from 'axios';
 class Tablas extends Component{
     constructor(props){
         super(props);
-        
+        this.state = {
+            modal: false
+          };
     }
 
     eliminar  = (e) =>{
@@ -33,11 +35,19 @@ class Tablas extends Component{
                 // always executed
             });
     }
+
+    toggle= ()=> {
+        this.setState({
+          modal: !this.state.modal
+        });
+        //this.handleSubmit();
+      }
     
     render(){
         return(
             
-            <Table dark>
+            <div>
+                <Table dark>
                 <thead>
                     <tr>
                         <th>#</th>
@@ -60,12 +70,16 @@ class Tablas extends Component{
                             <td>{persona.documento}</td>
                             <td>{persona.email}</td>
                             <td> <Button color="danger" onClick={()=>this.eliminar(persona.id)}>Eliminar</Button> </td>
+                            <td> <Button color="danger" onClick={()=>this.eliminar(persona.id)}>Atualizar</Button> </td>
+
+
                          </tr>
                         )}
                    
                   
                 </tbody>
-      </Table>
+            </Table>
+            </div>
         );
     }
         

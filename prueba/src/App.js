@@ -6,10 +6,6 @@ import './App.css';
 import PropTypes from 'prop-types'; 
 
 /*importando componentes*/
-
-import { Alert } from 'reactstrap';
-
-
 import Navegacion from './Componentes/Navegacion';
 import FormularioTareas from './Componentes/FormularioTareas';
 import { tareas } from './tareas.json';

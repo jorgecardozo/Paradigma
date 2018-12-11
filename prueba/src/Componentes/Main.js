@@ -3,8 +3,9 @@ import React, { Component } from 'react';
 import axios from 'axios'
 import Tablas from './Tablas';
 
-class Main extends Component {
+import {Row, Col, Table ,Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
+class Main extends Component {
 
     constructor() {
         super();
@@ -14,12 +15,30 @@ class Main extends Component {
             tipo: 1,
             documento: '',
             email: '',
-            datos: []
+            datos: [],
+            activado: false,
+            nombreA: '',
+            apellidoA: '',
+            tipoA: 1,
+            documentoA: '',
+            emailA: '',
+            idA: '',
+            modal: false
         }
     }
 
+    toggle= ()=> {
+        this.setState({
+          modal: !this.state.modal
+        });
+        //this.handleSubmit();
+      }
     componentDidMount(){
              this.actualizar();
+    }
+
+    ActivarEstado = () =>{
+        this.setState({activado: !this.state.activado});
     }
 
     actualizar =(e)=>{
@@ -43,7 +62,6 @@ class Main extends Component {
 
     }
     
-
     validarNumero = (e) => {
         const { value, name } = e.target;
         var expresionRegular = /^\d{0,8}$/;
@@ -66,7 +84,7 @@ class Main extends Component {
     }
 
     handleSubmit = (e) => {
-        e.preventDefault();
+        // e.preventDefault();
 
         console.log("Valor del Boton");
         console.log(e.value);
@@ -84,9 +102,11 @@ class Main extends Component {
                 documento: this.state.documento,
                 email: this.state.email
               })
-              .then(function (response) {
+              .then((response)=> {
                 console.log("Esto se envia a la base de datos");
                 console.log(response.data.data);
+                this.toggle();
+                this.actualizar();
               })
               .catch(function (error) {
                 console.log(error);
@@ -95,12 +115,11 @@ class Main extends Component {
         else
             console.log("Invalido");
 
-            
     }
 
     validarString = (e) => {
         const { value, name } = e.target;
-        var expresionRegular = /^\w{0,5}$/;
+        var expresionRegular = /^\w{0,10}$/;
         if (expresionRegular.test(value)) {
             console.log(value, name);
             // console.log("Error");
@@ -123,83 +142,356 @@ class Main extends Component {
 
     }
 
+    handleTipoA = (e) => {
+        const { value, name } = e.target;
+        let valor;
+        (value == "DNI") ? valor = 1 : (value == "Cedula") ? valor = 2: valor=3; 
+        console.log("valor de Tipo documento");
+        console.log(valor);
+        this.setState({
+            tipoA: valor
+        });
 
+    }
+
+
+    eliminar  = (e) =>{
+
+
+        console.log("This:",this)
+   
+        axios.delete('http://10.0.0.68:81/personas/'+e)
+            .then( (response)=> {
+                // handle success
+                console.log(response);
+
+                console.log("Entro al eliminar");
+                //console.log(this.props.onChange);
+                
+                /*if(this.props.onChange)
+                    this.props.onChange();*/
+                    this.actualizar();
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            })
+            .then(function () {
+                // always executed
+            });
+    }
+
+    HandleActualizar  = (e) =>{
+        e.preventDefault();
+
+        console.log("id: ",this.state.idA);
+        axios.put('http://10.0.0.68:81/personas/'+this.state.idA+"/",{
+                    nombre: this.state.nombreA,
+                    apellido: this.state.apellidoA,
+                    tipoDocumento: this.state.tipoA,
+                    documento: this.state.documentoA,
+                    email: this.state.emailA
+                })
+                    .then( (response)=> {
+                        // handle success
+                        console.log(response);
+
+                        console.log("Entro al actualizar");
+                        //console.log(this.props.onChange);
+                        
+                        /*if(this.props.onChange)
+                            this.props.onChange();*/
+                            this.actualizar();
+                    })
+                    .catch(function (error) {
+                        // handle error
+                        console.log(error);
+                    })
+                    .then(function () {
+                        // always executed
+                    });
+        this.ActivarEstado();
+    }
+
+    DatosActualizar = (e) => {
+        console.log("activado antes: ",this.state.activado);
+        let estado=this.state.activado;
+        this.setState({
+            nombreA: e.nombre,
+            apellidoA: e.apellido,
+            tipoA: e.tipoDocumento,
+            documentoA: e.documento,
+            emailA: e.email,
+            idA: e.id
+        });
+
+        this.ActivarEstado();
+        console.log("activado despues: ",this.state.activado);
+    }
 
     render() {
         { console.log("dentro de main, antes de mandar DB") }
         { console.log(this.state.datos) }
         return (
 
-
+            
             <div className="container">
-                <Tablas db={this.state.datos} onChange={this.actualizar}/>
 
-                <div className="row mt-4">
-                    <div className="card">
-                        <form onSubmit={this.handleSubmit}
-                            // onSubmit={} 
-                            className="card-body">
-                            <div className="form-group">
-                                <input
-                                    type="text"
-                                    name="nombre"
-                                    className="form-control"
-                                    value={this.state.nombre}
-                                    onChange={this.validarString}
-                                    placeholder="Nombre"
-                                />
-                            </div>
-                            <div className="form-group">
-                                <input
-                                    type="text"
-                                    name="apellido"
-                                    className="form-control"
-                                    value={this.state.apellido}
-                                    onChange={this.validarString}
-                                    placeholder="Apellido"
-                                />
-                            </div>
-                            <div className="form-group">
-                                <select
-                                    name="tipo"
-                                    className="form-control"
-                                    // value={}
-                                    onChange={ this.handleTipo}
-                                >
-                                    <option>DNI</option>
-                                    <option>Cedula</option>
-                                    <option>Pasaporte</option>
-                                </select>
-                            </div>
-                            <div className="form-group">
-                                <input
-                                    type="text"
-                                    name="documento"
-                                    className="form-control"
-                                    value={this.state.documento}
-                                    onChange={this.validarNumero}
-                                    placeholder="Documento"
-                                />
-                            </div>
-                            <div className="form-group">
-                                <input
-                                    type="text"
-                                    name="email"
-                                    className="form-control"
-                                    value={this.state.email}
-                                    onChange={this.validarMail}
-                                    placeholder="Email"
-                                />
-                            </div>
+               
+                    <Row>
+                        <Col xs="1">
+                            <Button color="success" onClick={this.toggle}>Cargar</Button>
+                        </Col>
+                    </Row>
 
-
-                            <button type="submit" className="btn btn-primary" onClick={this.actualizar}>
-                                Save
-                            </button>
-                        </form>
+                    <Row>
+                        <Table dark>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nombre</th>
+                                    <th>Apellido</th>
+                                    <th>Tipo DNI</th>
+                                    <th>Documento</th>
+                                    <th>Email</th>
+                                </tr>
+                            </thead>
+                            <tbody >
+                                {console.log("dentro de la tabla")}
+                                {console.log(this.props.db)}
+                                {   this.state.datos.map((persona, i) => 
+                                    <tr key={i}>
+                                        <th scope="row">{persona.id}</th>
+                                        <td>{persona.nombre}</td>
+                                        <td>{persona.apellido}</td>
+                                        <td>{persona.tipoDocumento}</td>
+                                        <td>{persona.documento}</td>
+                                        <td>{persona.email}</td>
+                                        <td> <Button color="danger" onClick={()=>this.eliminar(persona.id)}>Eliminar</Button> </td>
+                                        <td> <Button color="danger" onClick={()=>this.DatosActualizar(persona)}>Atualizar</Button> </td>
+                                    </tr>
+                                    )}
+                            </tbody>
+                        </Table>
+                    </Row>
+                   
+                    <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+                        <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
+                        <ModalBody>
+                        <div className="row mt-4">
+                        <div className="card">
+                            <form 
+                                // onSubmit={} 
+                                className="card-body">
+                                <div className="form-group">
+                                    <input
+                                        type="text"
+                                        name="nombre"
+                                        className="form-control"
+                                        value={this.state.nombre}
+                                        onChange={this.validarString}
+                                        placeholder="Nombre"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <input
+                                        type="text"
+                                        name="apellido"
+                                        className="form-control"
+                                        value={this.state.apellido}
+                                        onChange={this.validarString}
+                                        placeholder="Apellido"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <select
+                                        name="tipo"
+                                        className="form-control"
+                                        // value={}
+                                        onChange={ this.handleTipo}
+                                    >
+                                        <option>DNI</option>
+                                        <option>Cedula</option>
+                                        <option>Pasaporte</option>
+                                    </select>
+                                </div>
+                                <div className="form-group">
+                                    <input
+                                        type="text"
+                                        name="documento"
+                                        className="form-control"
+                                        value={this.state.documento}
+                                        onChange={this.validarNumero}
+                                        placeholder="Documento"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <input
+                                        type="text"
+                                        name="email"
+                                        className="form-control"
+                                        value={this.state.email}
+                                        onChange={this.validarMail}
+                                        placeholder="Email"
+                                    />
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                </div>
+                        </ModalBody>
+                        <ModalFooter>
+                            <Button color="primary" onClick={this.handleSubmit}>Seve</Button>{' '}
+                            <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+                        </ModalFooter>
+                    </Modal>
+            
+                
+        
+                {/* <Tablas db={this.state.datos} onChange={this.actualizar}/> */}
+                
+               
 
+                <Row>
+                    <Col xs="6">
+                        <div className="row mt-4">
+                        <div className="card">
+                            <form onSubmit={this.handleSubmit}
+                                // onSubmit={} 
+                                className="card-body">
+                                <div className="form-group">
+                                    <input
+                                        type="text"
+                                        name="nombre"
+                                        className="form-control"
+                                        value={this.state.nombre}
+                                        onChange={this.validarString}
+                                        placeholder="Nombre"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <input
+                                        type="text"
+                                        name="apellido"
+                                        className="form-control"
+                                        value={this.state.apellido}
+                                        onChange={this.validarString}
+                                        placeholder="Apellido"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <select
+                                        name="tipo"
+                                        className="form-control"
+                                        // value={}
+                                        onChange={ this.handleTipo}
+                                    >
+                                        <option>DNI</option>
+                                        <option>Cedula</option>
+                                        <option>Pasaporte</option>
+                                    </select>
+                                </div>
+                                <div className="form-group">
+                                    <input
+                                        type="text"
+                                        name="documento"
+                                        className="form-control"
+                                        value={this.state.documento}
+                                        onChange={this.validarNumero}
+                                        placeholder="Documento"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <input
+                                        type="text"
+                                        name="email"
+                                        className="form-control"
+                                        value={this.state.email}
+                                        onChange={this.validarMail}
+                                        placeholder="Email"
+                                    />
+                                </div>
+
+
+                                <button type="submit" className="btn btn-primary" onClick={this.actualizar}>
+                                    Save
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    </Col>
+                    
+                    {this.state.activado ? <Col xs="6">
+                        <div className="row mt-4">
+                            <div className="card">
+                                <form 
+                                    // onSubmit={} 
+                                    className="card-body">
+                                    <div className="form-group">
+                                        <input
+                                            type="text"
+                                            name="nombreA"
+                                            className="form-control"
+                                            value={this.state.nombreA}
+                                            onChange={this.validarString}
+                                            placeholder="Nombre"
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <input
+                                            type="text"
+                                            name="apellidoA"
+                                            className="form-control"
+                                            value={this.state.apellidoA}
+                                            onChange={this.validarString}
+                                            placeholder="Apellido"
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <select
+                                            name="tipoA"
+                                            className="form-control"
+                                            // value={}
+                                            onChange={ this.handleTipoA}
+                                        >
+                                            <option>DNI</option>
+                                            <option>Cedula</option>
+                                            <option>Pasaporte</option>
+                                        </select>
+                                    </div>
+                                    <div className="form-group">
+                                        <input
+                                            type="text"
+                                            name="documentoA"
+                                            className="form-control"
+                                            value={this.state.documentoA}
+                                            onChange={this.validarNumero}
+                                            placeholder="Documento"
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <input
+                                            type="text"
+                                            name="emailA"
+                                            className="form-control"
+                                            value={this.state.emailA}
+                                            onChange={this.validarMail}
+                                            placeholder="Email"
+                                        />
+                                    </div>
+
+
+                                    <button type="submit" className="btn btn-primary" onClick={this.HandleActualizar}>
+                                        Save
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </Col> :null}
+                </Row>
+
+
+               
             </div>
         );
     }
