@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
 class FormularioTareas extends Component{
-    constructor () {
-        super();
+    constructor (props) {
+        super(props);
         this.state = {
           titulo: '',
           responsable: '',

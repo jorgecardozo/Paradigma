@@ -46,14 +46,9 @@ class ModalActualizar extends Component{
                 })
                     .then( (response)=> {
                         // handle success
-                        console.log(response);
-
-                        console.log("Entro al actualizar");
-                        //console.log(this.props.onChange);
-                        
-                        /*if(this.props.onChange)
-                            this.props.onChange();*/
-                            this.actualizar();
+                        if(this.props.actualizar)
+                        this.props.actualizar();
+                        this.toggle();
                     })
                     .catch(function (error) {
                         // handle error
@@ -62,8 +57,7 @@ class ModalActualizar extends Component{
                     .then(function () {
                         // always executed
                     });
-        if(this.props.actualizar)
-            this.props.actualizar();
+      
     }
     validarNumero = (e) => {
         const { value, name } = e.target;

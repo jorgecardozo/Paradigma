@@ -9,8 +9,8 @@ import ModalActualizar from './ModalActualizar';
 
 class Main extends Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             nombre: '',
             apellido: '',
@@ -345,7 +345,7 @@ class Main extends Component {
                                     />
                                 </div>
                             </form>
-                        </div>
+                        </div> 
                     </div>
                         </ModalBody>
                         <ModalFooter>
