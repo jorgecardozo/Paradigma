@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 
 import axios from 'axios'
 import Tablas from './Tablas';
+import ModalEliminar from '../Componentes/ModalEliminar';
 
 import {Row, Col, Table ,Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import ModalActualizar from './ModalActualizar';
 
 class Main extends Component {
 
@@ -23,13 +25,29 @@ class Main extends Component {
             documentoA: '',
             emailA: '',
             idA: '',
-            modal: false
+            modal: false,
+            modalEliminar: false,
+            modalActualiar: false,
+            BotonEliminar: false,
+            BotonActualizar: false
         }
     }
 
     toggle= ()=> {
         this.setState({
           modal: !this.state.modal
+        });
+        //this.handleSubmit();
+      }
+      toggleEliminar= ()=> {
+        this.setState({
+          modalEliminar: !this.state.modalEliminar
+        });
+        //this.handleSubmit();
+      }
+      toggleActualizar= ()=> {
+        this.setState({
+          modalActualizar: !this.state.modalActualizar
         });
         //this.handleSubmit();
       }
@@ -157,19 +175,8 @@ class Main extends Component {
 
     eliminar  = (e) =>{
 
-
-        console.log("This:",this)
-   
         axios.delete('http://10.0.0.68:81/personas/'+e)
             .then( (response)=> {
-                // handle success
-                console.log(response);
-
-                console.log("Entro al eliminar");
-                //console.log(this.props.onChange);
-                
-                /*if(this.props.onChange)
-                    this.props.onChange();*/
                     this.actualizar();
             })
             .catch(function (error) {
@@ -234,13 +241,14 @@ class Main extends Component {
         { console.log(this.state.datos) }
         return (
 
-            
             <div className="container">
 
                
                     <Row>
                         <Col xs="1">
                             <Button color="success" onClick={this.toggle}>Cargar</Button>
+                            <br/>
+                            <br/>
                         </Col>
                     </Row>
 
@@ -267,8 +275,9 @@ class Main extends Component {
                                         <td>{persona.tipoDocumento}</td>
                                         <td>{persona.documento}</td>
                                         <td>{persona.email}</td>
-                                        <td> <Button color="danger" onClick={()=>this.eliminar(persona.id)}>Eliminar</Button> </td>
-                                        <td> <Button color="danger" onClick={()=>this.DatosActualizar(persona)}>Atualizar</Button> </td>
+                                        {/* <td> <Button color="danger" onClick={()=>this.eliminar(persona.id)}>Eliminar</Button> </td> */}
+                                        <td> <ModalEliminar actualizar={this.actualizar} id={persona.id}/></td>
+                                        <td> <ModalActualizar datosActualizar={this.DatosActualizar} actualizar={this.actualizar} persona={persona}/></td>
                                     </tr>
                                     )}
                             </tbody>
@@ -276,7 +285,7 @@ class Main extends Component {
                     </Row>
                    
                     <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
-                        <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
+                        <ModalHeader toggle={this.toggle}>Cargar Datos</ModalHeader>
                         <ModalBody>
                         <div className="row mt-4">
                         <div className="card">
@@ -340,158 +349,13 @@ class Main extends Component {
                     </div>
                         </ModalBody>
                         <ModalFooter>
-                            <Button color="primary" onClick={this.handleSubmit}>Seve</Button>{' '}
+                            <Button color="primary" onClick={this.handleSubmit}>Cargar</Button>{' '}
                             <Button color="secondary" onClick={this.toggle}>Cancel</Button>
                         </ModalFooter>
                     </Modal>
             
-                
-        
                 {/* <Tablas db={this.state.datos} onChange={this.actualizar}/> */}
                 
-               
-
-                <Row>
-                    <Col xs="6">
-                        <div className="row mt-4">
-                        <div className="card">
-                            <form onSubmit={this.handleSubmit}
-                                // onSubmit={} 
-                                className="card-body">
-                                <div className="form-group">
-                                    <input
-                                        type="text"
-                                        name="nombre"
-                                        className="form-control"
-                                        value={this.state.nombre}
-                                        onChange={this.validarString}
-                                        placeholder="Nombre"
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <input
-                                        type="text"
-                                        name="apellido"
-                                        className="form-control"
-                                        value={this.state.apellido}
-                                        onChange={this.validarString}
-                                        placeholder="Apellido"
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <select
-                                        name="tipo"
-                                        className="form-control"
-                                        // value={}
-                                        onChange={ this.handleTipo}
-                                    >
-                                        <option>DNI</option>
-                                        <option>Cedula</option>
-                                        <option>Pasaporte</option>
-                                    </select>
-                                </div>
-                                <div className="form-group">
-                                    <input
-                                        type="text"
-                                        name="documento"
-                                        className="form-control"
-                                        value={this.state.documento}
-                                        onChange={this.validarNumero}
-                                        placeholder="Documento"
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <input
-                                        type="text"
-                                        name="email"
-                                        className="form-control"
-                                        value={this.state.email}
-                                        onChange={this.validarMail}
-                                        placeholder="Email"
-                                    />
-                                </div>
-
-
-                                <button type="submit" className="btn btn-primary" onClick={this.actualizar}>
-                                    Save
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-
-                    </Col>
-                    
-                    {this.state.activado ? <Col xs="6">
-                        <div className="row mt-4">
-                            <div className="card">
-                                <form 
-                                    // onSubmit={} 
-                                    className="card-body">
-                                    <div className="form-group">
-                                        <input
-                                            type="text"
-                                            name="nombreA"
-                                            className="form-control"
-                                            value={this.state.nombreA}
-                                            onChange={this.validarString}
-                                            placeholder="Nombre"
-                                        />
-                                    </div>
-                                    <div className="form-group">
-                                        <input
-                                            type="text"
-                                            name="apellidoA"
-                                            className="form-control"
-                                            value={this.state.apellidoA}
-                                            onChange={this.validarString}
-                                            placeholder="Apellido"
-                                        />
-                                    </div>
-                                    <div className="form-group">
-                                        <select
-                                            name="tipoA"
-                                            className="form-control"
-                                            // value={}
-                                            onChange={ this.handleTipoA}
-                                        >
-                                            <option>DNI</option>
-                                            <option>Cedula</option>
-                                            <option>Pasaporte</option>
-                                        </select>
-                                    </div>
-                                    <div className="form-group">
-                                        <input
-                                            type="text"
-                                            name="documentoA"
-                                            className="form-control"
-                                            value={this.state.documentoA}
-                                            onChange={this.validarNumero}
-                                            placeholder="Documento"
-                                        />
-                                    </div>
-                                    <div className="form-group">
-                                        <input
-                                            type="text"
-                                            name="emailA"
-                                            className="form-control"
-                                            value={this.state.emailA}
-                                            onChange={this.validarMail}
-                                            placeholder="Email"
-                                        />
-                                    </div>
-
-
-                                    <button type="submit" className="btn btn-primary" onClick={this.HandleActualizar}>
-                                        Save
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </Col> :null}
-                </Row>
-
-
-               
             </div>
         );
     }
