@@ -16,7 +16,7 @@ class Tablas extends Component{
 
         console.log("This:",this)
    
-        axios.delete('http://10.0.0.68:81/personas/'+e)
+        axios.delete('http://127.0.0.1:8000/personas/'+e)
             .then( (response)=> {
                 // handle success
                 console.log(response);

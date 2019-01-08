@@ -63,7 +63,7 @@ class Main extends Component {
 
         console.log("LLamo a la funcion Actualizar");
       
-        axios.get('http://10.0.0.68:81/personas/')
+        axios.get('http://127.0.0.1:8000/personas/')
             .then((response)=> {
                 console.log("Las pido");
                 console.log(response.data.data);
@@ -113,7 +113,7 @@ class Main extends Component {
         if (expresionRegular.test(this.state.email)) {
             console.log("valido");
 
-              axios.post('http://10.0.0.68:81/personas/', {
+              axios.post('http://127.0.0.1:8000/personas/', {
                 nombre: this.state.nombre,
                 apellido: this.state.apellido,
                 tipoDocumento: this.state.tipo,
@@ -175,7 +175,7 @@ class Main extends Component {
 
     eliminar  = (e) =>{
 
-        axios.delete('http://10.0.0.68:81/personas/'+e)
+        axios.delete('http://127.0.0.1:8000/personas/'+e)
             .then( (response)=> {
                     this.actualizar();
             })
@@ -192,7 +192,7 @@ class Main extends Component {
         e.preventDefault();
 
         console.log("id: ",this.state.idA);
-        axios.put('http://10.0.0.68:81/personas/'+this.state.idA+"/",{
+        axios.put('http://127.0.0.1:8000/personas/'+this.state.idA+"/",{
                     nombre: this.state.nombreA,
                     apellido: this.state.apellidoA,
                     tipoDocumento: this.state.tipoA,

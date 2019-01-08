@@ -18,7 +18,7 @@ class ModalEliminar extends Component{
 
     eliminar  = () =>{
 
-        axios.delete('http://10.0.0.68:81/personas/'+this.props.id)
+        axios.delete('http://127.0.0.1:8000/personas/'+this.props.id)
             .then( (response)=> {
                     // this.actualizar();
                     console.log("valos del props actualizar: ",this.props.actualizar);

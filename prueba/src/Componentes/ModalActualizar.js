@@ -37,7 +37,7 @@ class ModalActualizar extends Component{
     DatosActualizar = () => {
         
        
-        axios.put('http://10.0.0.68:81/personas/'+this.state.idA+"/",{
+        axios.put('http://127.0.0.1:8000/personas/'+this.state.idA+"/",{
                     nombre: this.state.nombreA,
                     apellido: this.state.apellidoA,
                     tipoDocumento: this.state.tipoA,
